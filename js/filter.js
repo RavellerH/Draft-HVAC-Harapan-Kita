@@ -1,5 +1,46 @@
+function hidebtn(){
+  document.getElementById("btntempup").style.display = "none";
+  document.getElementById("btnrhup").style.display = "none";
+  document.getElementById("btntempdown").style.display = "none";
+  document.getElementById("btnrhdown").style.display = "none";
+  document.getElementById("btndone").style.display = "none";
+  document.getElementById("btnset").style.display = "block";
+}
+ hidebtn()
+ setInterval(updateValue, 3000);
+
+ function showbtn(){
+  document.getElementById("btntempup").style.display = "block";
+  document.getElementById("btnrhup").style.display = "block";
+  document.getElementById("btntempdown").style.display = "block";
+  document.getElementById("btnrhdown").style.display = "block";
+  document.getElementById("btndone").style.display = "block";
+  document.getElementById("btnset").style.display = "none";
+}
+ 
+
+let config = {};
+getConfig();
+setInterval(getConfig, 3000);
+// Function to fetch configuration
+function getConfig() {
+  // Replace 'config.json' with the path to your configuration file
+  const response = fetch("../config.json")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data.serverIP);
+      config = data.serverIP;
+    })
+    .catch((error) => {
+      console.error("Error fetching configuration:", error);
+      return {}; // Return an empty object if there's an error
+    });
+
+  return response;
+}
+
 function updateValue() {
-  fetch("http://192.168.1.7:1880/getData")
+  fetch("http://" + config + ":1880/getData")
     .then((response) => response.json())
     .then((data) => {
       const preFilter = parseFloat(data[0].Pre_Filter);
@@ -18,7 +59,20 @@ function updateValue() {
       const boosterStatusElement = document.getElementById("Booster_status");
       const filterStatusElement = document.getElementById("Filter_status");
       const hepaStatusElement = document.getElementById("HEPA_status");
+      const ahuStatusElement = document.getElementById("AHU_status");
 
+      if (ahuStatus === 1) {
+        ahuStatusElement.style.backgroundColor =
+        ahuStatusElement.style.backgroundColor === "lime"
+            ? "#CCFF99"
+            : "lime";
+            ahuStatusElement.style.color = "white"; // Text color
+            ahuStatusElement.textContent = "Running";
+      } else {
+        ahuStatusElement.style.backgroundColor = "red";
+        ahuStatusElement.style.color = "white"; // Text color
+        ahuStatusElement.textContent = "Stopped";
+      }
       if (eFan === 1) {
         exhaustStatusElement.style.backgroundColor =
           exhaustStatusElement.style.backgroundColor === "lime"
@@ -79,30 +133,7 @@ function updateValue() {
         boosterStatusElement.style.color = "white"; // Text color
         boosterStatusElement.textContent = "Stopped";
       }
-      if (preFilter >= 150 && preFilter <= 155) {
-        filterStatusElement.style.backgroundColor =
-          filterStatusElement.style.backgroundColor === "lime"
-            ? "#CCFF99"
-            : "lime";
-        filterStatusElement.style.color = "white"; // Text color
-        filterStatusElement.textContent = "Running";
-      } else {
-        filterStatusElement.style.backgroundColor = "red";
-        filterStatusElement.style.color = "white"; // Text color
-        filterStatusElement.textContent = "Stopped";
-      }
-      if (hepaFilter >= 150 && hepaFilter <= 155) {
-        hepaStatusElement.style.backgroundColor =
-          hepaStatusElement.style.backgroundColor === "lime"
-            ? "#CCFF99"
-            : "lime";
-        hepaStatusElement.style.color = "white"; // Text color
-        hepaStatusElement.textContent = "Running";
-      } else {
-        hepaStatusElement.style.backgroundColor = "red";
-        hepaStatusElement.style.color = "white"; // Text color
-        hepaStatusElement.textContent = "Stopped";
-      }
+      
 
       const tempCathlab = parseFloat(data[0].Temp_Cathlab);
       const rhCathlab = parseFloat(data[0].RH_Cathlab);
@@ -111,11 +142,14 @@ function updateValue() {
       TempElement.textContent = tempCathlab + "°C";
       const RHElement = document.getElementById("TBDSBb");
       RHElement.textContent = rhCathlab + "%";
+      removeNotification();
     })
     .catch((error) => {
       console.error("Error:", error);
+      // Show notification for connection error
+      showNotification("Connecting...");
     });
-  fetch("http://192.168.1.7:1880/getDataSetting")
+  fetch("http://" + config + ":1880/getDataSetting")
     .then((response) => response.json())
     .then((data) => {
       const currentTemperature = parseFloat(data[0].TempCathlab);
@@ -129,18 +163,41 @@ function updateValue() {
       console.error("Error:", error);
     });
 }
+// Function to show notification
+function showNotification(message) {
+  const notificationElement = document.createElement("div");
+  notificationElement.textContent = message;
+  notificationElement.classList.add("notification");
+  document.body.appendChild(notificationElement);
+}
 
+// Function to remove notification
+function removeNotification() {
+  const notificationElement = document.querySelector(".notification");
+  if (notificationElement) {
+    notificationElement.remove();
+  }
+}
 updateValue();
-setInterval(updateValue, 1000);
+setInterval(updateValue, 3000);
 
 function changeTemperature(delta) {
   const TBDSAElement = document.getElementById("TBDSA");
   let currentTemperature = parseInt(TBDSAElement.textContent); // Get current temperature as an integer
-  currentTemperature += delta; // Increment or decrement the temperature based on the delta
-  TBDSAElement.textContent = currentTemperature + "°C"; // Update the temperature value in the HTML
+  // currentTemperature += delta; // Increment or decrement the temperature based on the delta
+  const newTemperature = currentTemperature + delta;
+  // Check if the new temperature is within the acceptable range (18 to 26 degrees Celsius)
+  if (newTemperature < 18 || newTemperature > 26) {
+    console.log(
+      "Temperature is outside the acceptable range (18 to 26 degrees Celsius). Skipping update."
+    );
+    return; // Exit the function without updating the temperature
+  }
+
+  TBDSAElement.textContent = newTemperature + "°C"; // Update the temperature value in the HTML
 
   // Send the updated temperature value to the server via HTTP GET request
-  fetch(`http://192.168.1.7:1880/setDataTemp?value=${currentTemperature}`)
+  fetch(`http://`  + config + `:1880/setDataTemp?value=${newTemperature}`)
     .then((response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -157,11 +214,20 @@ function changeTemperature(delta) {
 function changeRH(delta) {
   const TBDSBRHElement = document.getElementById("TBDSBRH");
   let currentRH = parseInt(TBDSBRHElement.textContent); // Get current temperature as an integer
-  currentRH += delta; // Increment or decrement the temperature based on the delta
-  TBDSBRHElement.textContent = currentRH + "%"; // Update the temperature value in the HTML
+  // currentRH += delta; // Increment or decrement the temperature based on the delta
+  const newRH = currentRH + delta;
+  // Check if the new temperature is within the acceptable range (18 to 26 degrees Celsius)
+  if (newRH < 50 || newRH > 60) {
+    console.log(
+      "RH is outside the acceptable range (50 to 60). Skipping update."
+    );
+    return; // Exit the function without updating the temperature
+  }
+
+  TBDSBRHElement.textContent = newRH + "%"; // Update the temperature value in the HTML
 
   // Send the updated temperature value to the server via HTTP GET request
-  fetch(`http://192.168.1.7:1880/setDataRH?value=${currentRH}`)
+  fetch(`http://`  + config + `:1880/setDataRH?value=${newRH}`)
     .then((response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -413,24 +479,7 @@ function btnStop(buttonId) {
       "Stopped";
   }, 2000);
 
-  // var http = new XMLHttpRequest();
-  // var url = "http://192.168.137.137:1887/StopBackwash?ID=" + buttonId;
-  // http.open("GET", url, true);
-  // http.send();
-  // http.onreadystatechange = function () {
-  //     if (this.readyState === 4 && this.status === 200) {
-  //         var data = JSON.parse(this.responseText);
-  //         setTimeout(function () {
-  //             if (data.Stat) {
-  //                 document.getElementById(buttonId.substring(0, 3) + "_status").placeholder = "Stopped";
-  //             } else {
-  //                 document.getElementById(buttonId.substring(0, 3) + "_status").placeholder = "Stop Failed";
-  //             }
-  //             buttonElement.style.backgroundColor = originalColor;
-  //             buttonElement.textContent = originalText;
-  //         }, 500);
-  //     }
-  // }
+  
 }
 
 function btnRun(buttonId) {
@@ -459,24 +508,7 @@ function btnRun(buttonId) {
       "Running";
   }, 2000);
 
-  //   var http = new XMLHttpRequest();
-  //   var url = "http://192.168.137.137:1887/RunBackwash?ID=" + buttonId;
-  //   http.open("GET", url, true);
-  //   http.send();
-  //   http.onreadystatechange = function () {
-  //       if (this.readyState === 4 && this.status === 200) {
-  //           var data = JSON.parse(this.responseText);
-  //           setTimeout(function () {
-  //               if (data.Stat) {
-  //                   document.getElementById(buttonId.substring(0, 3) + "_status").placeholder = "Running";
-  //               } else {
-  //                   document.getElementById(buttonId.substring(0, 3) + "_status").placeholder = "Run Failed";
-  //               }
-  //               buttonElement.style.backgroundColor = originalColor;
-  //               buttonElement.textContent = originalText;
-  //           }, 500);
-  //       }
-  //   }
+  
 }
 
 function btnInlet(buttonId) {
@@ -695,7 +727,7 @@ function updateButton() {
   }
 }
 
-setInterval(updateButton, 1000);
+setInterval(updateButton, 3000);
 
 function updateSensor() {
   var http = new XMLHttpRequest();
@@ -721,4 +753,116 @@ function updateSensor() {
   };
 }
 updateSensor();
-setInterval(updateSensor, 1000);
+setInterval(updateSensor, 3000);
+
+// Function to disable all buttons
+// Function to disable all buttons
+function disableAllButtons() {
+  document.getElementById("increaseTemperatureButton").disabled = true;
+  document.getElementById("decreaseTemperatureButton").disabled = true;
+  document.getElementById("increaseRHButton").disabled = true;
+  document.getElementById("decreaseRHButton").disabled = true;
+
+  // Change background color to grey
+  document.getElementById("increaseTemperatureButton").style.backgroundColor =
+    "grey";
+  document.getElementById("decreaseTemperatureButton").style.backgroundColor =
+    "grey";
+  document.getElementById("increaseRHButton").style.backgroundColor = "grey";
+  document.getElementById("decreaseRHButton").style.backgroundColor = "grey";
+}
+
+// Function to enable all buttons
+function enableAllButtons() {
+  document.getElementById("increaseTemperatureButton").disabled = false;
+  document.getElementById("decreaseTemperatureButton").disabled = false;
+  document.getElementById("increaseRHButton").disabled = false;
+  document.getElementById("decreaseRHButton").disabled = false;
+
+  // Change background color back to azure
+  document.getElementById("increaseTemperatureButton").style.backgroundColor =
+    "azure";
+  document.getElementById("decreaseTemperatureButton").style.backgroundColor =
+    "azure";
+  document.getElementById("increaseRHButton").style.backgroundColor = "azure";
+  document.getElementById("decreaseRHButton").style.backgroundColor = "azure";
+}
+
+// Function to enable buttons for 1 minute after password verification
+function enableButtonsForOneMinute() {
+  enableAllButtons(); // Enable buttons
+  setTimeout(disableAllButtons, 60000); // Disable buttons after 1 minute (60000 milliseconds)
+}
+
+// Function to verify password
+function verifyPassword() {
+  var password = prompt("Please enter your password:");
+  if (password === "hvac5") {
+    alert("Password verified. Buttons will be enabled for 1 minute.");
+    enableButtonsForOneMinute(); // Enable buttons for 1 minute
+  } else {
+    alert("Incorrect password. Buttons remain disabled.");
+  }
+}
+
+// Call disableAllButtons function on page load
+window.onload = disableAllButtons;
+
+
+// Get the modal
+const modal = document.getElementById("myModal");
+// Get the elements inside the modal
+const modalTitle = document.getElementById("modalTitle");
+const modalContent = document.getElementById("modalContent");
+const passwordInput = document.getElementById("passwordInput");
+const modalActionButton = document.getElementById("modalActionButton");
+let modalstatus = "";
+// Function to open the modal
+function openModal(data) {
+  modal.style.display = "block";
+  console.log(data);
+  modalstatus = data;
+}
+function openModalinfo() {
+  var modal = document.getElementById("infoModal");
+  modal.style.display = "block";
+}
+
+// Function to close the modal
+function closeModal() {
+  modal.style.display = "none";
+}
+
+function closeModalinfo() {
+  var modal = document.getElementById("infoModal");
+  modal.style.display = "none";
+}
+
+// Function to handle modal action (password verification or close)
+function verifyPassword() {
+  const passwordInput = document.getElementById("passwordInput").value;
+  // Replace 'your-password' with the actual password
+  if (passwordInput === "hvac5") {
+    alert(
+      "Password is correct. Proceed with " + modalstatus + " functionality."
+    );
+    closeModal(); // Close the modal if password is correct
+    document.getElementById("passwordInput").value = ""; // Reset password input
+    let stat = 0;
+    if (modalstatus === "SET") {
+      
+      showbtn()
+      
+    } if (modalstatus === "DONE") {
+      hidebtn()
+    }
+    
+      
+  } else {
+    alert("Incorrect password. Please try again.");
+    document.getElementById("passwordInput").value = ""; // Reset password input
+    closeModal(); // Close the modal if password is correct
+  }
+}
+
+

@@ -4,16 +4,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const navTime = document.getElementById("nav-time");
 
   // Get the current date and time
-  // Get the current date and time
   const now = new Date();
 
   // Extract date, day, and hour from the current date and time
   const date = now.toLocaleDateString("en-US");
   const day = now.toLocaleDateString("en-US", { weekday: "long" });
-  //   const hour = now.getHours();
-  //   const minute = now.getMinutes();
-  //   const second = now.getSeconds();
-  //   <img src="../img/logo.png" class="h-6 mr-3 border-r-2 pr-3 border-slate-300" alt="logo-wtp" >
   const hour = String(now.getHours()).padStart(2, "0"); // Ensure hour is two digits
   const minute = String(now.getMinutes()).padStart(2, "0"); // Ensure minute is two digits
   const second = String(now.getSeconds()).padStart(2, "0"); // Ensure second is two digits
@@ -41,18 +36,18 @@ document.addEventListener("DOMContentLoaded", function () {
         <nav class="bg-slate-100 absolute z-50 h-[440px] w-[210px] m-[1vw] rounded-md flex items-start pl-6 shadow-md" style="background-color: rgba(43, 44, 64, 1); width:17.5vw; height:90vh; margin:1vw; padding-top: 5vh">
             <ul class="block" >
 
-            <li class=" rounded-md flex items-center pt-1 shadow-md" style="padding: 7px; width: 85%; margin-bottom: 4vh; margin-left:1vw;">
+            <li class=" rounded-md flex items-center pt-1 shadow-md" style="padding: 5px; width: 85%; margin-bottom: 4vh; margin-left:0vw;">
 
-            <h1 class="flex justify-center items-center h-9 p-3 rounded-md bg-cyan-500 text-white text-center font-semibold text-[1vw] width:100%;">
+            <h1 class="flex justify-center items-center h-9 p-3 rounded-md bg-cyan-500 text-white text-center font-semibold text-[1vw] " style="font-size: 1.3vw; margin-left: 1px; width:15vw; border-color:FFFFFF">
                 HVAC RSJP <br> HARAPAN KITA 
             </h1>
         
         </li>
         
 
-                <li class="group">
-                    <a href="../index.html" class="list-menu" id="dashboard" style="font-size: 1.3vw; ">
-                        <span class="pr-3" style="font-size: 10px">
+                <li class="group" >
+                    <a href="../index.html" class="list-menu" id="dashboard" style="font-size: 1.1vw; " >
+                        <span class="pr-3" style="font-size: 10px ">
                             <svg xmlns="http://www.w3.org/2000/svg" class="fill-slate-500" width="24" height="24"
                                 viewBox="0 0 24 24">
                                 <path d="M4 13h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v8a1 1 0 0 0 1
@@ -64,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 </li>
                 <li class="group">
                     
-                    <a href="../pages/filter.html" class="list-menu" id="filter" style="font-size: 1.3vw">
+                    <a href="../pages/filter.html" class="list-menu" id="filter" style="font-size: 1.1vw">
                         <span class="pr-3">
                         <svg xmlns="http://www.w3.org/2000/svg" class="fill-slate-500" width="24" height="24"
                         viewBox="0 0 24 24">
@@ -81,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 </li>
                 
                 <li class="group">
-                <a href="../pages/overview.html" class="list-menu" id="overview" style="font-size: 1.3vw">
+                <a href="../pages/overview.html" class="list-menu" id="overview" style="font-size: 1.1vw">
                         <span class="pr-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="fill-slate-500" width="24" height="24"
                                 viewBox="0 0 24 24">
