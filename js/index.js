@@ -55,7 +55,7 @@ function updateInfoValue() {
       const unitstatValue = data[0].UnitStatus;
       document.getElementById("unitstatValue").textContent = unitstatValue;
       if (unitstatValue === "ON") {
-        document.getElementById("btn_ON").style.backgroundColor = "lime";
+        document.getElementById("btn_ON").style.backgroundColor = "#76e810";
         document.getElementById("btn_OFF").style.backgroundColor = "gray";
       } else {
         document.getElementById("btn_ON").style.backgroundColor = "gray";
@@ -97,7 +97,7 @@ function updateGaugeValue() {
       chartraww2.refresh(rhMachine);
       chartfm1.refresh(preFilter);
       if (preFilter >= 200) {
-        document.getElementById("prefil").style.backgroundColor = "orangered";
+        document.getElementById("prefil").style.background = "orangered";
       } else {
         document.getElementById("prefil").style.backgroundColor = " ";
       }
@@ -253,7 +253,7 @@ let chartraw = new JustGage({
   value: 0,
   valueFontColor: "aliceblue",
   min: 0,
-  max: 50,
+  max: 30,
   hideMinMax: true,
   title: "Temperature",
   titleFontColor: "aliceblue",
@@ -263,7 +263,7 @@ let chartraw = new JustGage({
     "#00FF50", // Green (medium)
     "#FF0000", // Red (high)
   ],
-  gaugeWidthScale: 1, // Set to 1 for a full circle
+  gaugeWidthScale: .6, // Set to 1 for a full circle
   gaugeColor: "rgba(203, 213, 225, 0.5)", // Adjust the alpha value for transparency
   counter: true,
   pointer: true,
@@ -276,6 +276,36 @@ let chartraw = new JustGage({
     stroke_width: 3,
     stroke_linecap: "round",
   },
+  // donut: true,
+  // donutStartAngle: -90,
+  shadowSize: 5,
+  shadowVerticalOffset: 10,
+  // relativeGaugeSize: true,
+  showInnerShadow: true,
+  shadowOpacity: 0.5,
+  customSectors: [
+    {
+      color: "#00B6D4", // Light blue
+      lo: 0,
+      hi: 20,
+    },
+    {
+      color: "#00FF50", // Lime green
+      lo: 20,
+      hi: 26,
+    },
+    {
+      color: "#FFFF00", // Yellow
+      lo: 26,
+      hi: 30,
+    },
+    {
+      color: "#FF0000", // Red
+      lo: 30,
+      hi: 40,
+    },
+  ],
+  levelColorsGradient: true
 });
 
 let chartraww = new JustGage({
@@ -293,7 +323,7 @@ let chartraww = new JustGage({
     "#00FF50", // Green (medium)
     "#FF0000", // Red (high)
   ],
-  gaugeWidthScale: 1, // Set to 1 for a full circle
+  gaugeWidthScale: .6, // Set to 1 for a full circle
   gaugeColor: "rgba(203, 213, 225, 0.5)", // Adjust the alpha value for transparency
   counter: true,
   pointer: true,
@@ -306,6 +336,36 @@ let chartraww = new JustGage({
     stroke_width: 3,
     stroke_linecap: "round",
   },
+  // donut: true,
+  // donutStartAngle: -90,
+  shadowSize: 5,
+  shadowVerticalOffset: 10,
+  // relativeGaugeSize: true,
+  showInnerShadow: true,
+  shadowOpacity: 0.5,
+  customSectors: [
+    {
+      color: "#00B6D4", // Light blue
+      lo: 0,
+      hi: 20,
+    },
+    {
+      color: "#00FF50", // Lime green
+      lo: 20,
+      hi: 26,
+    },
+    {
+      color: "#FFFF00", // Yellow
+      lo: 26,
+      hi: 30,
+    },
+    {
+      color: "#FF0000", // Red
+      lo: 30,
+      hi: 40,
+    },
+  ],
+  levelColorsGradient: true
 });
 
 let chartraw1 = new JustGage({
@@ -323,7 +383,7 @@ let chartraw1 = new JustGage({
     "#00FF50", // Green (medium)
     "#FF0000", // Red (high)
   ],
-  gaugeWidthScale: 1, // Set to 1 for a full circle
+  gaugeWidthScale: .6, // Set to 1 for a full circle
   gaugeColor: "rgba(203, 213, 225, 0.5)", // Adjust the alpha value for transparency
   counter: true,
   pointer: true,
@@ -336,6 +396,36 @@ let chartraw1 = new JustGage({
     stroke_width: 3,
     stroke_linecap: "round",
   },
+  // donut: true,
+  // donutStartAngle: -90,
+  shadowSize: 5,
+  shadowVerticalOffset: 10,
+  // relativeGaugeSize: true,
+  showInnerShadow: true,
+  shadowOpacity: 0.5,
+  customSectors: [
+    {
+      color: "#00B6D4", // Light blue
+      lo: 0,
+      hi: 20,
+    },
+    {
+      color: "#00FF50", // Lime green
+      lo: 20,
+      hi: 26,
+    },
+    {
+      color: "#FFFF00", // Yellow
+      lo: 26,
+      hi: 30,
+    },
+    {
+      color: "#FF0000", // Red
+      lo: 30,
+      hi: 40,
+    },
+  ],
+  levelColorsGradient: true
 });
 
 let chartraww2 = new JustGage({
@@ -353,7 +443,7 @@ let chartraww2 = new JustGage({
     "#00FF50", // Green (medium)
     "#FF0000", // Red (high)
   ],
-  gaugeWidthScale: 1, // Set to 1 for a full circle
+  gaugeWidthScale: .6, // Set to 1 for a full circle
   gaugeColor: "rgba(203, 213, 225, 0.5)", // Adjust the alpha value for transparency
   counter: true,
   pointer: true,
@@ -366,6 +456,36 @@ let chartraww2 = new JustGage({
     stroke_width: 3,
     stroke_linecap: "round",
   },
+  // donut: true,
+  // donutStartAngle: -90,
+  shadowSize: 5,
+  shadowVerticalOffset: 10,
+  // relativeGaugeSize: true,
+  showInnerShadow: true,
+  shadowOpacity: 0.5,
+  customSectors: [
+    {
+      color: "#00B6D4", // Light blue
+      lo: 0,
+      hi: 20,
+    },
+    {
+      color: "#00FF50", // Lime green
+      lo: 20,
+      hi: 26,
+    },
+    {
+      color: "#FFFF00", // Yellow
+      lo: 26,
+      hi: 30,
+    },
+    {
+      color: "#FF0000", // Red
+      lo: 30,
+      hi: 40,
+    },
+  ],
+  levelColorsGradient: true
 });
 
 let chartfm1 = new JustGage({

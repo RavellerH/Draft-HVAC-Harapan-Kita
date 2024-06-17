@@ -33,7 +33,14 @@ document.addEventListener("DOMContentLoaded", function () {
   `;
 
   const navContent = `
-        <nav class="bg-slate-100 absolute z-50 h-[440px] w-[210px] m-[1vw] rounded-md flex items-start pl-6 shadow-md" style="background-color: rgba(43, 44, 64, 1); width:17.5vw; height:90vh; margin:1vw; padding-top: 5vh">
+        <nav class="bg-slate-100 absolute z-50 h-[440px] w-[210px] m-[1vw] rounded-md flex items-start pl-6 shadow-md" 
+        style=" width:17.5vw; height:94vh; margin:1vw; padding-top: 5vh;
+        background: rgba(43, 44, 64, 0.3);
+        border-radius: 5px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(7.6px);
+        -webkit-backdrop-filter: blur(7.6px);
+        border: 2px solid rgba(4, 4, 4, 0.2);">
             <ul class="block" >
 
             <li class=" rounded-md flex items-center pt-1 shadow-md" style="padding: 5px; width: 85%; margin-bottom: 4vh; margin-left:0vw;">
@@ -86,8 +93,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         </span> Machine Room</a>
                 </li>
 
-                <li class="group bg-slate-100 rounded-md flex items-center pt-1 shadow-md" style="padding: 7px; width:13vw; margin-top:4vh;">
-                    <span class="" style="padding:1vw">
+                <li class="rounded-md flex items-center pt-1 shadow-md" style="padding: 7px; width:13vw; margin-top:4vh; ">
+                    <span class="" 
+                    style="padding:1vw; ">
                         
                         <span id="currentDateTime" style="color:azure ;font-size: 1.5vw; font-weight:italic">
                             <b>${new Date().toLocaleDateString("en-US", {
