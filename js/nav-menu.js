@@ -33,28 +33,29 @@ document.addEventListener("DOMContentLoaded", function () {
   `;
 
   const navContent = `
-        <nav class="bg-slate-100 absolute z-50 h-[440px] w-[210px] m-[1vw] rounded-md flex items-start pl-6 shadow-md" 
+        <nav class="bg-slate-100 absolute z-50 h-[440px] w-[210px] m-[1vw] rounded-md flex items-center pl-6 shadow-md" 
         style=" width:17.5vw; height:94vh; margin:1vw; padding-top: 5vh;
-        background: rgba(43, 44, 64, 0.3);
+        background: rgba(143, 255, 252, 0.2);
         border-radius: 5px;
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 5px 5px rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(7.6px);
         -webkit-backdrop-filter: blur(7.6px);
         border: 2px solid rgba(4, 4, 4, 0.2);">
             <ul class="block" >
 
-            <li class=" rounded-md flex items-center pt-1 shadow-md" style="padding: 5px; width: 85%; margin-bottom: 4vh; margin-left:0vw;">
+            <li class="bg-cyan-500 rounded-md flex items-center pt-1 shadow-md" style="padding: 5px; width: 85%; margin-bottom: 4vh; margin-left:0vw;">
 
-            <h1 class="flex justify-center items-center h-9 p-3 rounded-md bg-cyan-500 text-white text-center font-semibold text-[1vw] " style="font-size: 1.3vw; margin-left: 1px; width:15vw; border-color:FFFFFF">
+            <h1 class="flex justify-center items-center h-9 p-3 rounded-md bg-cyan-500 text-white text-center font-semibold text-[1vw] " 
+            style="font-size: 1.3vw; margin-left: 1px; width:15vw; border-color:FFFFFF; text-shadow: 1px 1px 1px rgba(1, 1, 1, 1); box-shadow: 0  5px 5px rgba(0, 0, 0, 0.5);">
                 HVAC RSJP <br> HARAPAN KITA 
             </h1>
         
         </li>
         
 
-                <li class="group" >
-                    <a href="../index.html" class="list-menu" id="dashboard" style="font-size: 1.1vw; " >
-                        <span class="pr-3" style="font-size: 10px ">
+                <li class="group " >
+                    <a href="../index.html" class="list-menu text-white" id="dashboard" style="font-size: 1.1vw; text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.6); color:#0a014e" >
+                        <span class="pr-3 " style="font-size: 10px ; ">
                             <svg xmlns="http://www.w3.org/2000/svg" class="fill-slate-500" width="24" height="24"
                                 viewBox="0 0 24 24">
                                 <path d="M4 13h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v8a1 1 0 0 0 1
@@ -66,8 +67,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 </li>
                 <li class="group">
                     
-                    <a href="../pages/filter.html" class="list-menu" id="filter" style="font-size: 1.1vw">
-                        <span class="pr-3">
+                    <a href="../pages/filter.html" class="list-menu text-white" id="filter" style="font-size: 1.1vw; text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.6); color:#0a014e">
+                        <span class="pr-3 ">
                         <svg xmlns="http://www.w3.org/2000/svg" class="fill-slate-500" width="24" height="24"
                         viewBox="0 0 24 24">
                         <path d="M18.277 8c.347.596.985 1 1.723 1a2 2 0 0 0 0-4c-.738 0-1.376.404-1.723
@@ -83,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 </li>
                 
                 <li class="group">
-                <a href="../pages/overview.html" class="list-menu" id="overview" style="font-size: 1.1vw">
+                <a href="../pages/overview.html" class="list-menu text-white" id="overview" style="font-size: 1.1vw; text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.6); color:#0a014e">
                         <span class="pr-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="fill-slate-500" width="24" height="24"
                                 viewBox="0 0 24 24">
@@ -93,23 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         </span> Machine Room</a>
                 </li>
 
-                <li class="rounded-md flex items-center pt-1 shadow-md" style="padding: 7px; width:13vw; margin-top:4vh; ">
-                    <span class="" 
-                    style="padding:1vw; ">
-                        
-                        <span id="currentDateTime" style="color:azure ;font-size: 1.5vw; font-weight:italic">
-                            <b>${new Date().toLocaleDateString("en-US", {
-                              weekday: "long",
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            })}</b>
-                        </span>
-                        <span id="currentTime" style="color:white; font-size: 2vw; text-align: center;">
-                            <b>00:00:00</b>
-                        </span>
-                    </span>
-                 </li>
+                
 
                  
 
@@ -152,3 +137,22 @@ document.addEventListener("DOMContentLoaded", function () {
     ).innerHTML = `<b>${hour}:${minute}:${second}</b>`;
   }, 1000);
 });
+
+
+{/* <li class="rounded-md flex items-center pt-1 shadow-md" style="padding: 7px; width:13vw; margin-top:4vh; ">
+                    <span class="" 
+                    style="padding:1vw; ">
+                        
+                        <span id="currentDateTime" style="color:#005fc8 ;font-size: 1.5vw; font-weight:italic">
+                            <b>${new Date().toLocaleDateString("en-US", {
+                              weekday: "long",
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })}</b>
+                        </span>
+                        <span id="currentTime" style="color:#005fc8; font-size: 2vw; text-align: center;">
+                            <b>00:00:00</b>
+                        </span>
+                    </span>
+                 </li> */}

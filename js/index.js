@@ -1,3 +1,33 @@
+function updateDateTime() {
+  const now = new Date();
+  const hour = ("0" + now.getHours()).slice(-2);
+  const minute = ("0" + now.getMinutes()).slice(-2);
+  const second = ("0" + now.getSeconds()).slice(-2);
+
+  const dateTimeHTML = `
+      <span id="currentDateTime" class="date">
+          <b>${now.toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}</b>
+      </span>
+      <span id="currentTime" class="time">
+          <b>${hour}:${minute}:${second}</b>
+      </span>
+  `;
+
+  // Update the entire date-time-container div
+  document.getElementById("date-time-container").innerHTML = dateTimeHTML;
+}
+
+// Initial call to display the date and time immediately
+updateDateTime();
+
+// Update the date and time every second
+setInterval(updateDateTime, 1000);
+
 document.addEventListener("DOMContentLoaded", function () {
   setTimeout(function () {
     const dashboard = document.getElementById("dashboard");
@@ -61,6 +91,18 @@ function updateInfoValue() {
         document.getElementById("btn_ON").style.backgroundColor = "gray";
         document.getElementById("btn_OFF").style.backgroundColor = "orangered";
       }
+
+      const automanual = data[0].AutoManual;
+
+      if (automanual === 1) {
+        document.getElementById("bgstatAM").style.backgroundColor =
+          "rgb(77, 12, 182)";
+        document.getElementById("statusAM").textContent = "AUTO";
+      } else {
+        document.getElementById("bgstatAM").style.backgroundColor = "orangered";
+        document.getElementById("statusAM").textContent = "MANUAL"; 
+        document.getElementById("statusAM").style.fontSize = "2vh"; 
+      }
     });
 }
 updateInfoValue();
@@ -69,6 +111,8 @@ setInterval(getConfig, 1000);
 setInterval(updateInfoValue, 5000); // Refresh every 5 seconds (adjust as needed)
 
 // INFORMATION
+
+let tempcathlab1;
 
 // Fetch data from Node-RED server and update JustGage value
 function updateGaugeValue() {
@@ -96,29 +140,38 @@ function updateGaugeValue() {
       chartraww.refresh(rhCathlab);
       chartraww2.refresh(rhMachine);
       chartfm1.refresh(preFilter);
-      if (preFilter >= 200) {
+      if (preFilter >= 180) {
         document.getElementById("prefil").style.background = "orangered";
+        document.getElementById("prefil").textContent = "Warning";
+        document.getElementById("prefil").style.color = "yellow";
       } else {
-        document.getElementById("prefil").style.backgroundColor = " ";
+        document.getElementById("prefil").style.backgroundColor = "";
+        document.getElementById("prefil").textContent = "Good";
+        document.getElementById("prefil").style.color = "darkgreen";
       }
       chartfm3.refresh(hepaFilter);
-      if (hepaFilter >= 200) {
-        document.getElementById("hepafil").style.backgroundColor = "orangered";
+      if (hepaFilter >= 180) {
+        document.getElementById("hepafil").style.backgroundColor = "blue";
+        document.getElementById("hepafil").textContent = "Warning";
+        document.getElementById("hepafil").style.color = "blue";
       } else {
         document.getElementById("hepafil").style.backgroundColor = " ";
+        document.getElementById("hepafil").textContent = "Good";
+        document.getElementById("hepafil").style.color = "darkgreen";
       }
       document.getElementById("tempCat").textContent = tempCathlab + " °C";
+      tempcathlab1 = tempCathlab;
       document.getElementById("tempMac").textContent = tempMachine + " °C";
       document.getElementById("rhCath").textContent = rhCathlab + " %";
       document.getElementById("rhMac").textContent = rhMachine + " %";
-      document.getElementById("prefil").textContent = preFilter + " Pa";
-      document.getElementById("hepafil").textContent = hepaFilter + " Pa";
+      // document.getElementById("prefil").textContent = preFilter + " Pa";
+      // document.getElementById("hepafil").textContent = hepaFilter + " Pa";
 
       const outdoorUnitElement = document.getElementById("OutdoorUnit");
       const outdoorIcon = document.getElementById("outdooricon");
       if (outdoorUnit === 1) {
         outdoorUnitElement.textContent = "ON";
-        outdoorUnitElement.style.color = "";
+        outdoorUnitElement.style.color = "#0085cb";
         outdoorIcon.classList.add("bx-flashing");
         outdoorIcon.style.color = "";
       } else {
@@ -131,7 +184,7 @@ function updateGaugeValue() {
       const ahuIcon = document.getElementById("ahuicon");
       if (ahuStatus === 1) {
         AHUElement.textContent = "ON";
-        AHUElement.style.color = "";
+        AHUElement.style.color = "#0085cb";
         ahuIcon.classList.add("bx-flashing");
         ahuIcon.style.color = "";
       } else {
@@ -144,7 +197,7 @@ function updateGaugeValue() {
       const BFIcon = document.getElementById("boostericon");
       if (bFan === 1) {
         BFElement.textContent = "ON";
-        BFElement.style.color = "";
+        BFElement.style.color = "#0085cb";
         BFIcon.classList.add("bx-spin");
         BFIcon.style.color = "";
       } else {
@@ -157,7 +210,7 @@ function updateGaugeValue() {
       const EFIcon = document.getElementById("exhausticon");
       if (eFan === 1) {
         EFElement.textContent = "ON";
-        EFElement.style.color = "";
+        EFElement.style.color = "#0085cb";
         EFIcon.classList.add("bx-spin");
         EFIcon.style.color = "";
       } else {
@@ -170,7 +223,7 @@ function updateGaugeValue() {
       const Heat1Icon = document.getElementById("heat1icon");
       if (heat1 === 1) {
         Heat1Element.textContent = "ON";
-        Heat1Element.style.color = "";
+        Heat1Element.style.color = "#0085cb";
         Heat1Icon.classList.add("bx-spin");
         Heat1Icon.style.color = "";
       } else {
@@ -183,7 +236,7 @@ function updateGaugeValue() {
       const Heat2Icon = document.getElementById("heat2icon");
       if (heat2 === 1) {
         Heat2Element.textContent = "ON";
-        Heat2Element.style.color = "";
+        Heat2Element.style.color = "#0085cb";
         Heat2Icon.classList.add("bx-spin");
         Heat2Icon.style.color = "";
       } else {
@@ -251,20 +304,21 @@ setInterval(updateGaugeValue, 5000); // Refresh every 5 seconds (adjust as neede
 let chartraw = new JustGage({
   id: "gauRaw",
   value: 0,
-  valueFontColor: "aliceblue",
+  valueFontColor: "#003b7d",
   min: 0,
-  max: 30,
+  max: 50,
   hideMinMax: true,
   title: "Temperature",
-  titleFontColor: "aliceblue",
+  titleFontColor: "#003b7d",
   label: "°C",
+  labelFontColor: "#003b7d",
   levelColors: [
     "#00B6D4", // Blue (low)
     "#00FF50", // Green (medium)
     "#FF0000", // Red (high)
   ],
-  gaugeWidthScale: .6, // Set to 1 for a full circle
-  gaugeColor: "rgba(203, 213, 225, 0.5)", // Adjust the alpha value for transparency
+  gaugeWidthScale: 0.6, // Set to 1 for a full circle
+  gaugeColor: "rgba(115, 255, 202, 1)", // Adjust the alpha value for transparency
   counter: true,
   pointer: true,
   pointerOptions: {
@@ -276,55 +330,56 @@ let chartraw = new JustGage({
     stroke_width: 3,
     stroke_linecap: "round",
   },
-  // donut: true,
-  // donutStartAngle: -90,
-  shadowSize: 5,
-  shadowVerticalOffset: 10,
-  // relativeGaugeSize: true,
+  donut: true,
+  donutStartAngle: -30,
+  shadowSize: 2,
+  shadowVerticalOffset: 7,
+  relativeGaugeSize: true,
   showInnerShadow: true,
   shadowOpacity: 0.5,
   customSectors: [
     {
-      color: "#00B6D4", // Light blue
+      color: "#2b59fb", // Light blue
       lo: 0,
       hi: 20,
     },
     {
-      color: "#00FF50", // Lime green
+      color: "#40bb45", // Lime green
       lo: 20,
-      hi: 26,
+      hi: 23,
     },
     {
       color: "#FFFF00", // Yellow
-      lo: 26,
-      hi: 30,
+      lo: 23,
+      hi: 26,
     },
     {
       color: "#FF0000", // Red
-      lo: 30,
+      lo: 27,
       hi: 40,
     },
   ],
-  levelColorsGradient: true
+  levelColorsGradient: true,
 });
 
 let chartraww = new JustGage({
   id: "gauRaww",
   value: 0,
-  valueFontColor: "aliceblue",
-  min: 40,
-  max: 70,
+  valueFontColor: "#003b7d",
+  min: 0,
+  max: 100,
   hideMinMax: true,
   title: "Relative Humidity",
-  titleFontColor: "aliceblue",
+  titleFontColor: "#003b7d",
   label: "%",
+  labelFontColor: "#003b7d",
   levelColors: [
     "#00B6D4", // Blue (low)
     "#00FF50", // Green (medium)
     "#FF0000", // Red (high)
   ],
-  gaugeWidthScale: .6, // Set to 1 for a full circle
-  gaugeColor: "rgba(203, 213, 225, 0.5)", // Adjust the alpha value for transparency
+  gaugeWidthScale: 0.6, // Set to 1 for a full circle
+  gaugeColor: "rgba(115, 255, 202, 1)", // Adjust the alpha value for transparency
   counter: true,
   pointer: true,
   pointerOptions: {
@@ -336,55 +391,56 @@ let chartraww = new JustGage({
     stroke_width: 3,
     stroke_linecap: "round",
   },
-  // donut: true,
-  // donutStartAngle: -90,
-  shadowSize: 5,
-  shadowVerticalOffset: 10,
-  // relativeGaugeSize: true,
+  donut: true,
+  donutStartAngle: -30,
+  shadowSize: 2,
+  shadowVerticalOffset: 7,
+  relativeGaugeSize: true,
   showInnerShadow: true,
   shadowOpacity: 0.5,
   customSectors: [
     {
-      color: "#00B6D4", // Light blue
-      lo: 0,
-      hi: 20,
+      color: "#2b59fb", // Light blue
+      lo: 50,
+      hi: 60,
     },
     {
-      color: "#00FF50", // Lime green
-      lo: 20,
-      hi: 26,
+      color: "#bf8c11", // Lime green
+      lo: 60,
+      hi: 65,
     },
     {
       color: "#FFFF00", // Yellow
-      lo: 26,
-      hi: 30,
+      lo: 65,
+      hi: 70,
     },
     {
       color: "#FF0000", // Red
-      lo: 30,
-      hi: 40,
+      lo: 71,
+      hi: 85,
     },
   ],
-  levelColorsGradient: true
+  levelColorsGradient: true,
 });
 
 let chartraw1 = new JustGage({
   id: "gauRaw1",
   value: 0,
-  valueFontColor: "aliceblue",
+  valueFontColor: "#003b7d",
   min: 0,
   max: 50,
   hideMinMax: true,
   title: "Temperature",
-  titleFontColor: "aliceblue",
+  titleFontColor: "#003b7d",
   label: "°C",
+  labelFontColor: "#003b7d",
   levelColors: [
     "#00B6D4", // Blue (low)
     "#00FF50", // Green (medium)
     "#FF0000", // Red (high)
   ],
-  gaugeWidthScale: .6, // Set to 1 for a full circle
-  gaugeColor: "rgba(203, 213, 225, 0.5)", // Adjust the alpha value for transparency
+  gaugeWidthScale: 0.6, // Set to 1 for a full circle
+  gaugeColor: "rgba(115, 255, 202, 1)", // Adjust the alpha value for transparency
   counter: true,
   pointer: true,
   pointerOptions: {
@@ -396,55 +452,58 @@ let chartraw1 = new JustGage({
     stroke_width: 3,
     stroke_linecap: "round",
   },
-  // donut: true,
-  // donutStartAngle: -90,
-  shadowSize: 5,
-  shadowVerticalOffset: 10,
-  // relativeGaugeSize: true,
+  donut: true,
+  donutStartAngle: -30,
+  shadowSize: 2,
+  shadowVerticalOffset: 7,
+  relativeGaugeSize: true,
   showInnerShadow: true,
   shadowOpacity: 0.5,
   customSectors: [
     {
-      color: "#00B6D4", // Light blue
+      color: "#2b59fb", // Light blue
       lo: 0,
       hi: 20,
     },
     {
-      color: "#00FF50", // Lime green
+      color: "#40bb45", // Lime green
       lo: 20,
-      hi: 26,
+      hi: 23,
     },
     {
       color: "#FFFF00", // Yellow
-      lo: 26,
-      hi: 30,
+      lo: 23,
+      hi: 26,
     },
     {
       color: "#FF0000", // Red
-      lo: 30,
+      lo: 27,
       hi: 40,
     },
   ],
-  levelColorsGradient: true
+  levelColorsGradient: true,
 });
+
+// Function to add shadow to label, value, and title
 
 let chartraww2 = new JustGage({
   id: "gauRaww2",
   value: 0,
-  valueFontColor: "aliceblue",
-  min: 40,
-  max: 70,
+  valueFontColor: "#003b7d",
+  min: 0,
+  max: 100,
   hideMinMax: true,
   title: "Relative Humidity",
-  titleFontColor: "aliceblue",
+  titleFontColor: "#003b7d",
   label: "%",
+  labelFontColor: "#003b7d",
   levelColors: [
     "#00B6D4", // Blue (low)
     "#00FF50", // Green (medium)
     "#FF0000", // Red (high)
   ],
-  gaugeWidthScale: .6, // Set to 1 for a full circle
-  gaugeColor: "rgba(203, 213, 225, 0.5)", // Adjust the alpha value for transparency
+  gaugeWidthScale: 0.6, // Set to 1 for a full circle
+  gaugeColor: "rgba(115, 255, 202, 1)", // Adjust the alpha value for transparency
   counter: true,
   pointer: true,
   pointerOptions: {
@@ -456,56 +515,56 @@ let chartraww2 = new JustGage({
     stroke_width: 3,
     stroke_linecap: "round",
   },
-  // donut: true,
-  // donutStartAngle: -90,
-  shadowSize: 5,
-  shadowVerticalOffset: 10,
-  // relativeGaugeSize: true,
+  donut: true,
+  donutStartAngle: -30,
+  shadowSize: 2,
+  shadowVerticalOffset: 7,
+  relativeGaugeSize: true,
   showInnerShadow: true,
   shadowOpacity: 0.5,
   customSectors: [
     {
-      color: "#00B6D4", // Light blue
-      lo: 0,
-      hi: 20,
+      color: "#2b59fb", // Light blue
+      lo: 50,
+      hi: 60,
     },
     {
-      color: "#00FF50", // Lime green
-      lo: 20,
-      hi: 26,
+      color: "#bf8c11", // Lime green
+      lo: 60,
+      hi: 65,
     },
     {
       color: "#FFFF00", // Yellow
-      lo: 26,
-      hi: 30,
+      lo: 65,
+      hi: 70,
     },
     {
       color: "#FF0000", // Red
-      lo: 30,
-      hi: 40,
+      lo: 71,
+      hi: 85,
     },
   ],
-  levelColorsGradient: true
+  levelColorsGradient: true,
 });
 
 let chartfm1 = new JustGage({
   id: "gaufm1",
   value: 0,
-  valueFontColor: "aliceblue",
+  valueFontColor: "#003b7d",
   min: 0,
-  max: 250,
+  max: 500,
   hideMinMax: true,
   title: "Pre & Medium Filter",
-  titleFontColor: "aliceblue",
+  titleFontColor: "#003b7d",
   label: "Pa",
-  labelFontColor: "aliceblue",
+  labelFontColor: "#003b7d",
   levelColors: [
     "#00B6D4", // Blue (low)
     "#00FF50", // Green (medium)
     "#FF0000", // Red (high)
   ],
-  gaugeWidthScale: 0.7,
-  gaugeColor: "rgb(203, 213, 225)",
+  gaugeWidthScale: 0.6, // Set to 1 for a full circle
+  gaugeColor: "rgba(115, 255, 202, 1)", // Adjust the alpha value for transparency
   counter: true,
   pointer: true,
   pointerOptions: {
@@ -517,14 +576,44 @@ let chartfm1 = new JustGage({
     stroke_width: 3,
     stroke_linecap: "round",
   },
+  // donut: true,
+  // donutStartAngle: -90,
+  shadowSize: 2,
+  shadowVerticalOffset: 7,
+  // relativeGaugeSize: true,
+  showInnerShadow: true,
+  shadowOpacity: 0.5,
+  customSectors: [
+    {
+      color: "#00B6D4", // Light blue
+      lo: 0,
+      hi: 100,
+    },
+    {
+      color: "#00FF50", // Lime green
+      lo: 100,
+      hi: 180,
+    },
+    {
+      color: "#FFFF00", // Yellow
+      lo: 180,
+      hi: 250,
+    },
+    {
+      color: "#FF0000", // Red
+      lo: 250,
+      hi: 500,
+    },
+  ],
+  levelColorsGradient: true,
 });
 
 let chartfm2 = new JustGage({
   id: "gaufm2",
   value: 0,
-  valueFontColor: "aliceblue",
-  min: 125,
-  max: 175,
+  valueFontColor: "#003b7d",
+  min: 0,
+  max: 500,
   hideMinMax: true,
   titleFontColor: "#64748b",
   label: "Pa",
@@ -533,8 +622,8 @@ let chartfm2 = new JustGage({
     "#00FF50", // Green (medium)
     "#FF0000", // Red (high)
   ],
-  gaugeWidthScale: 0.7,
-  gaugeColor: "rgb(203, 213, 225)",
+  gaugeWidthScale: 0.6, // Set to 1 for a full circle
+  gaugeColor: "rgba(115, 255, 202, 1)", // Adjust the alpha value for transparency
   counter: true,
   pointer: true,
   pointerOptions: {
@@ -546,27 +635,57 @@ let chartfm2 = new JustGage({
     stroke_width: 3,
     stroke_linecap: "round",
   },
+  // donut: true,
+  // donutStartAngle: -90,
+  shadowSize: 2,
+  shadowVerticalOffset: 7,
+  // relativeGaugeSize: true,
+  showInnerShadow: true,
+  shadowOpacity: 0.5,
+  customSectors: [
+    {
+      color: "#00B6D4", // Light blue
+      lo: 0,
+      hi: 100,
+    },
+    {
+      color: "#00FF50", // Lime green
+      lo: 100,
+      hi: 180,
+    },
+    {
+      color: "#FFFF00", // Yellow
+      lo: 180,
+      hi: 250,
+    },
+    {
+      color: "#FF0000", // Red
+      lo: 250,
+      hi: 500,
+    },
+  ],
+  levelColorsGradient: true,
 });
 
 let chartfm3 = new JustGage({
   id: "gaufm3",
   value: 0,
-  valueFontColor: "aliceblue",
+  valueFontColor: "#003b7d",
   min: 0,
-  max: 250,
+  max: 500,
   hideMinMax: true,
   title: "HEPA Filter",
-  titleFontColor: "aliceblue",
+  titleFontColor: "#003b7d",
   label: "Pa",
-  labelFontColor: "aliceblue", // Set the color of the label
+  labelFontColor: "#003b7d", // Set the color of the label
   labelFontSize: 148, // Set the font size of the label
   levelColors: [
     "#00B6D4", // Blue (low)
     "#00FF50", // Green (medium)
     "#FF0000", // Red (high)
   ],
-  gaugeWidthScale: 0.7,
-  gaugeColor: "rgb(203, 213, 225)",
+  gaugeWidthScale: 0.6, // Set to 1 for a full circle
+  gaugeColor: "rgba(115, 255, 202, 1)", // Adjust the alpha value for transparency
   counter: true,
   pointer: true,
   pointerOptions: {
@@ -578,6 +697,36 @@ let chartfm3 = new JustGage({
     stroke_width: 3,
     stroke_linecap: "round",
   },
+  // donut: true,
+  // donutStartAngle: -90,
+  shadowSize: 2,
+  shadowVerticalOffset: 7,
+  // relativeGaugeSize: true,
+  showInnerShadow: true,
+  shadowOpacity: 0.5,
+  customSectors: [
+    {
+      color: "#00B6D4", // Light blue
+      lo: 0,
+      hi: 100,
+    },
+    {
+      color: "#00FF50", // Lime green
+      lo: 100,
+      hi: 180,
+    },
+    {
+      color: "#FFFF00", // Yellow
+      lo: 180,
+      hi: 250,
+    },
+    {
+      color: "#FF0000", // Red
+      lo: 250,
+      hi: 500,
+    },
+  ],
+  levelColorsGradient: true,
 });
 
 function addSeparator(x) {
@@ -648,3 +797,95 @@ function verifyPassword() {
     closeModal(); // Close the modal if password is correct
   }
 }
+
+var options = {
+  series: [20],
+  chart: {
+    height: 350,
+    type: "radialBar",
+    toolbar: {
+      show: false,
+    },
+    events: {
+      rendered: function (chartContext, config) {
+        // Update the custom label with the initial value
+        document.getElementById("chart-value").innerText = options.series[0];
+      },
+      dataPointSelection: function (event, chartContext, config) {
+        // Update the custom label when the data point is selected
+        var value = config.w.globals.series[config.dataPointIndex];
+        document.getElementById("chart-value").innerText = value;
+      },
+    },
+  },
+  plotOptions: {
+    radialBar: {
+      startAngle: -135,
+      endAngle: 225,
+      hollow: {
+        margin: 0,
+        size: "70%",
+        background: "#bdffc2",
+        dropShadow: {
+          enabled: true,
+          top: 3,
+          left: 0,
+          blur: 4,
+          opacity: 0.24,
+        },
+      },
+      track: {
+        background: "#407a45",
+        strokeWidth: "67%",
+        margin: 0,
+        dropShadow: {
+          enabled: true,
+          top: -3,
+          left: 0,
+          blur: 4,
+          opacity: 0.35,
+        },
+      },
+      dataLabels: {
+        show: true,
+        name: {
+          offsetY: -10,
+          show: true,
+          color: "#888",
+          fontSize: "17px",
+        },
+        value: {
+          formatter: function (val) {
+            return parseInt(val);
+          },
+          color: "#111",
+          fontSize: "30px",
+          show: true,
+          offsetY: 0,
+          offsetX: -20, // Adjust this to move the value to the left
+        },
+      },
+    },
+  },
+  fill: {
+    type: "gradient",
+    gradient: {
+      shade: "light",
+      type: "horizontal",
+      shadeIntensity: 0.5,
+      gradientToColors: ["#00FF50", "#FFFF00", "#FF0000"], // End colors of the gradient
+      inverseColors: false,
+      opacityFrom: 1,
+      opacityTo: 1,
+      stops: [0, 33, 66, 100], // Define the stops for the gradient
+    },
+  },
+  stroke: {
+    lineCap: "round",
+  },
+  labels: [" "],
+  colors: ["#00B6D4"], // Starting color of the gradient
+};
+
+var chart = new ApexCharts(document.querySelector("#chart_sssss"), options);
+chart.render();

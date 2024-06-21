@@ -179,7 +179,7 @@ function removeNotification() {
   }
 }
 updateValue();
-setInterval(updateValue, 3000);
+setInterval(updateValue, 1000);
 
 function changeTemperature(delta) {
   const TBDSAElement = document.getElementById("TBDSA");
