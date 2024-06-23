@@ -1,4 +1,5 @@
 {
-    "serverIP": "localhost" 
+    "serverIP": "localhost",
+    "password" : "hvac6" 
     
   }

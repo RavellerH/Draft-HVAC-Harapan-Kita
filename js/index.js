@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 let config = {};
+let passwordhvac = {};
 // Function to fetch configuration
 function getConfig() {
   // Replace 'config.json' with the path to your configuration file
@@ -44,6 +45,7 @@ function getConfig() {
     .then((data) => {
       console.log(data.serverIP);
       config = data.serverIP;
+      passwordhvac = data.password;
     })
     .catch((error) => {
       console.error("Error fetching configuration:", error);
@@ -100,8 +102,8 @@ function updateInfoValue() {
         document.getElementById("statusAM").textContent = "AUTO";
       } else {
         document.getElementById("bgstatAM").style.backgroundColor = "orangered";
-        document.getElementById("statusAM").textContent = "MANUAL"; 
-        document.getElementById("statusAM").style.fontSize = "2vh"; 
+        document.getElementById("statusAM").textContent = "MANUAL";
+        document.getElementById("statusAM").style.fontSize = "2vh";
       }
     });
 }
@@ -766,7 +768,7 @@ function closeModalinfo() {
 function verifyPassword() {
   const passwordInput = document.getElementById("passwordInput").value;
   // Replace 'your-password' with the actual password
-  if (passwordInput === "hvac5") {
+  if (passwordInput === passwordhvac) {
     alert(
       "Password is correct. Proceed with " + modalstatus + " functionality."
     );
