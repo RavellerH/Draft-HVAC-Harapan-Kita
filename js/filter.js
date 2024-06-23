@@ -18,7 +18,7 @@ function hidebtn(){
   document.getElementById("btnset").style.display = "none";
 }
  
-
+let passwordhvac = {};
 let config = {};
 getConfig();
 setInterval(getConfig, 3000);
@@ -30,6 +30,7 @@ function getConfig() {
     .then((data) => {
       console.log(data.serverIP);
       config = data.serverIP;
+      passwordhvac = data.password;
     })
     .catch((error) => {
       console.error("Error fetching configuration:", error);
@@ -797,7 +798,7 @@ function enableButtonsForOneMinute() {
 // Function to verify password
 function verifyPassword() {
   var password = prompt("Please enter your password:");
-  if (password === "hvac5") {
+  if (password === passwordhvac) {
     alert("Password verified. Buttons will be enabled for 1 minute.");
     enableButtonsForOneMinute(); // Enable buttons for 1 minute
   } else {
@@ -842,7 +843,7 @@ function closeModalinfo() {
 function verifyPassword() {
   const passwordInput = document.getElementById("passwordInput").value;
   // Replace 'your-password' with the actual password
-  if (passwordInput === "hvac5") {
+  if (passwordInput === passwordhvac) {
     alert(
       "Password is correct. Proceed with " + modalstatus + " functionality."
     );

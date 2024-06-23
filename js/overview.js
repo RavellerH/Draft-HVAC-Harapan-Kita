@@ -1,4 +1,4 @@
-function hidebtn(){
+function hidebtn() {
   document.getElementById("btntempup").style.display = "none";
   document.getElementById("btnrhup").style.display = "none";
   document.getElementById("btntempdown").style.display = "none";
@@ -6,10 +6,10 @@ function hidebtn(){
   document.getElementById("btndone").style.display = "none";
   document.getElementById("btnset").style.display = "block";
 }
- hidebtn()
- setInterval(updateValue, 5000);
+hidebtn();
+setInterval(updateValue, 5000);
 
- function showbtn(){
+function showbtn() {
   document.getElementById("btntempup").style.display = "block";
   document.getElementById("btnrhup").style.display = "block";
   document.getElementById("btntempdown").style.display = "block";
@@ -17,7 +17,7 @@ function hidebtn(){
   document.getElementById("btndone").style.display = "block";
   document.getElementById("btnset").style.display = "none";
 }
-
+let passwordhvac = {};
 let config = {};
 getConfig();
 setInterval(getConfig, 1000);
@@ -29,6 +29,7 @@ function getConfig() {
     .then((data) => {
       console.log(data.serverIP);
       config = data.serverIP;
+      passwordhvac = data.password;
     })
     .catch((error) => {
       console.error("Error fetching configuration:", error);
@@ -62,11 +63,11 @@ function updateValue() {
 
       if (ahuStatus === 1) {
         ahuStatusElement.style.backgroundColor =
-        ahuStatusElement.style.backgroundColor === "lime"
+          ahuStatusElement.style.backgroundColor === "lime"
             ? "#CCFF99"
             : "lime";
-            ahuStatusElement.style.color = "white"; // Text color
-            ahuStatusElement.textContent = "Running";
+        ahuStatusElement.style.color = "white"; // Text color
+        ahuStatusElement.textContent = "Running";
       } else {
         ahuStatusElement.style.backgroundColor = "red";
         ahuStatusElement.style.color = "white"; // Text color
@@ -132,7 +133,6 @@ function updateValue() {
         boosterStatusElement.style.color = "white"; // Text color
         boosterStatusElement.textContent = "Stopped";
       }
-      
 
       const tempCathlab = parseFloat(data[0].Temp_Cathlab);
       const rhCathlab = parseFloat(data[0].RH_Cathlab);
@@ -373,11 +373,6 @@ function start() {
 
 setTimeout(start, 500);
 
-
-
-
-
-
 // Get the modal
 const modal = document.getElementById("myModal");
 // Get the elements inside the modal
@@ -411,7 +406,7 @@ function closeModalinfo() {
 function verifyPassword() {
   const passwordInput = document.getElementById("passwordInput").value;
   // Replace 'your-password' with the actual password
-  if (passwordInput === "hvac5") {
+  if (passwordInput === passwordhvac) {
     alert(
       "Password is correct. Proceed with " + modalstatus + " functionality."
     );
@@ -419,14 +414,10 @@ function verifyPassword() {
     document.getElementById("passwordInput").value = ""; // Reset password input
     let stat = 0;
     if (modalstatus === "SET") {
-      
-      showbtn()
-      
-    } if (modalstatus === "DOWN") {
-     
+      showbtn();
     }
-    
-      
+    if (modalstatus === "DOWN") {
+    }
   } else {
     alert("Incorrect password. Please try again.");
     document.getElementById("passwordInput").value = ""; // Reset password input
