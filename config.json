@@ -1,5 +1,6 @@
 {
     "serverIP": "localhost",
-    "password" : "hvac6" 
+    "password" : "hvac6", 
+    "unitID" : "CATHLAB 6"
     
   }

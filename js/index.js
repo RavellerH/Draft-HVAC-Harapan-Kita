@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 let config = {};
 let passwordhvac = {};
+let UnitID = {};
 // Function to fetch configuration
 function getConfig() {
   // Replace 'config.json' with the path to your configuration file
@@ -46,6 +47,9 @@ function getConfig() {
       console.log(data.serverIP);
       config = data.serverIP;
       passwordhvac = data.password;
+      // unitID = data.unitID;
+      document.getElementById("OutdoorUnitz").textContent = data.unitID;
+      console.log(data.unitID);
     })
     .catch((error) => {
       console.error("Error fetching configuration:", error);
@@ -57,6 +61,7 @@ function getConfig() {
 
 // console.log(config);
 // [[[[[[[[[FUNCTION TO GET DATA]]]]]]]]]]]
+let GV_automanual
 
 function updateInfoValue() {
   fetch("http://" + config + ":1880/getInfoData")
@@ -95,7 +100,8 @@ function updateInfoValue() {
       }
 
       const automanual = data[0].AutoManual;
-
+      GV_automanual = data[0].AutoManual;
+      console.log("Test Global " + GV_automanual)
       if (automanual === 1) {
         document.getElementById("bgstatAM").style.backgroundColor =
           "rgb(77, 12, 182)";
@@ -780,7 +786,12 @@ function verifyPassword() {
     } else {
       stat = 0;
     }
-    fetch(`http://` + config + `:1880/setUnitStat?value=${stat}`)
+    if (GV_automanual === 0) {
+      console.error("Manual Mode Still Active, Switch to AUTO on the Panel to  Gain Remote Access")
+      alert("Manual Mode Still Active, Switch to AUTO on the Panel to  Gain Remote Access")
+    }
+    else {
+      fetch(`http://` + config + `:1880/setUnitStat?value=${stat}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -793,6 +804,8 @@ function verifyPassword() {
       .catch((error) => {
         console.error("There was a problem updating :", error);
       });
+    }
+    
   } else {
     alert("Incorrect password. Please try again.");
     document.getElementById("passwordInput").value = ""; // Reset password input
