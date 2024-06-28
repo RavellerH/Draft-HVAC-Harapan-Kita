@@ -1,4 +1,4 @@
-function hidebtn(){
+function hidebtn() {
   document.getElementById("btntempup").style.display = "none";
   document.getElementById("btnrhup").style.display = "none";
   document.getElementById("btntempdown").style.display = "none";
@@ -6,10 +6,10 @@ function hidebtn(){
   document.getElementById("btndone").style.display = "none";
   document.getElementById("btnset").style.display = "block";
 }
- hidebtn()
- setInterval(updateValue, 3000);
+hidebtn();
+setInterval(updateValue, 3000);
 
- function showbtn(){
+function showbtn() {
   document.getElementById("btntempup").style.display = "block";
   document.getElementById("btnrhup").style.display = "block";
   document.getElementById("btntempdown").style.display = "block";
@@ -17,7 +17,7 @@ function hidebtn(){
   document.getElementById("btndone").style.display = "block";
   document.getElementById("btnset").style.display = "none";
 }
- 
+
 let passwordhvac = {};
 let config = {};
 getConfig();
@@ -64,11 +64,11 @@ function updateValue() {
 
       if (ahuStatus === 1) {
         ahuStatusElement.style.backgroundColor =
-        ahuStatusElement.style.backgroundColor === "lime"
+          ahuStatusElement.style.backgroundColor === "lime"
             ? "#CCFF99"
             : "lime";
-            ahuStatusElement.style.color = "white"; // Text color
-            ahuStatusElement.textContent = "Running";
+        ahuStatusElement.style.color = "white"; // Text color
+        ahuStatusElement.textContent = "Running";
       } else {
         ahuStatusElement.style.backgroundColor = "red";
         ahuStatusElement.style.color = "white"; // Text color
@@ -134,7 +134,6 @@ function updateValue() {
         boosterStatusElement.style.color = "white"; // Text color
         boosterStatusElement.textContent = "Stopped";
       }
-      
 
       const tempCathlab = parseFloat(data[0].Temp_Cathlab);
       const rhCathlab = parseFloat(data[0].RH_Cathlab);
@@ -198,7 +197,7 @@ function changeTemperature(delta) {
   TBDSAElement.textContent = newTemperature + "°C"; // Update the temperature value in the HTML
 
   // Send the updated temperature value to the server via HTTP GET request
-  fetch(`http://`  + config + `:1880/setDataTemp?value=${newTemperature}`)
+  fetch(`http://` + config + `:1880/setDataTemp?value=${newTemperature}`)
     .then((response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -228,7 +227,7 @@ function changeRH(delta) {
   TBDSBRHElement.textContent = newRH + "%"; // Update the temperature value in the HTML
 
   // Send the updated temperature value to the server via HTTP GET request
-  fetch(`http://`  + config + `:1880/setDataRH?value=${newRH}`)
+  fetch(`http://` + config + `:1880/setDataRH?value=${newRH}`)
     .then((response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -257,74 +256,6 @@ if (win && document.querySelector("#sidenav-scrollbar")) {
   };
   Scrollbar.init(document.querySelector("#sidenav-scrollbar"), options);
 }
-
-
-
-function main(data, len) {
-  Upper(data, len);
-}
-function start() {
-  takedatarelay();
-  datasensor();
-}
-start();
-
-
-
-
-// Function to disable all buttons
-// Function to disable all buttons
-function disableAllButtons() {
-  document.getElementById("increaseTemperatureButton").disabled = true;
-  document.getElementById("decreaseTemperatureButton").disabled = true;
-  document.getElementById("increaseRHButton").disabled = true;
-  document.getElementById("decreaseRHButton").disabled = true;
-
-  // Change background color to grey
-  document.getElementById("increaseTemperatureButton").style.backgroundColor =
-    "grey";
-  document.getElementById("decreaseTemperatureButton").style.backgroundColor =
-    "grey";
-  document.getElementById("increaseRHButton").style.backgroundColor = "grey";
-  document.getElementById("decreaseRHButton").style.backgroundColor = "grey";
-}
-
-// Function to enable all buttons
-function enableAllButtons() {
-  document.getElementById("increaseTemperatureButton").disabled = false;
-  document.getElementById("decreaseTemperatureButton").disabled = false;
-  document.getElementById("increaseRHButton").disabled = false;
-  document.getElementById("decreaseRHButton").disabled = false;
-
-  // Change background color back to azure
-  document.getElementById("increaseTemperatureButton").style.backgroundColor =
-    "azure";
-  document.getElementById("decreaseTemperatureButton").style.backgroundColor =
-    "azure";
-  document.getElementById("increaseRHButton").style.backgroundColor = "azure";
-  document.getElementById("decreaseRHButton").style.backgroundColor = "azure";
-}
-
-// Function to enable buttons for 1 minute after password verification
-function enableButtonsForOneMinute() {
-  enableAllButtons(); // Enable buttons
-  setTimeout(disableAllButtons, 60000); // Disable buttons after 1 minute (60000 milliseconds)
-}
-
-// Function to verify password
-function verifyPassword() {
-  var password = prompt("Please enter your password:");
-  if (password === passwordhvac) {
-    alert("Password verified. Buttons will be enabled for 1 minute.");
-    enableButtonsForOneMinute(); // Enable buttons for 1 minute
-  } else {
-    alert("Incorrect password. Buttons remain disabled.");
-  }
-}
-
-// Call disableAllButtons function on page load
-window.onload = disableAllButtons;
-
 
 // Get the modal
 const modal = document.getElementById("myModal");
@@ -367,19 +298,14 @@ function verifyPassword() {
     document.getElementById("passwordInput").value = ""; // Reset password input
     let stat = 0;
     if (modalstatus === "SET") {
-      
-      showbtn()
-      
-    } if (modalstatus === "DONE") {
-      hidebtn()
+      showbtn();
     }
-    
-      
+    if (modalstatus === "DONE") {
+      hidebtn();
+    }
   } else {
     alert("Incorrect password. Please try again.");
     document.getElementById("passwordInput").value = ""; // Reset password input
     closeModal(); // Close the modal if password is correct
   }
 }
-
-

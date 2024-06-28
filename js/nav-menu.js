@@ -119,23 +119,25 @@ document.addEventListener("DOMContentLoaded", function () {
   //   navTime.innerHTML = hdContent1;
   navMenu.innerHTML = navContent;
 
-  setInterval(() => {
-    const now = new Date();
-    const hour = ("0" + now.getHours()).slice(-2);
-    const minute = ("0" + now.getMinutes()).slice(-2);
-    const second = ("0" + now.getSeconds()).slice(-2);
-    document.getElementById(
-      "currentDateTime"
-    ).innerHTML = `<b> ${now.toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    })}</b>`;
-    document.getElementById(
-      "currentTime"
-    ).innerHTML = `<b>${hour}:${minute}:${second}</b>`;
-  }, 1000);
+//   setInterval(() => {
+//     const now = new Date();
+//     const hour = ("0" + now.getHours()).slice(-2);
+//     const minute = ("0" + now.getMinutes()).slice(-2);
+//     const second = ("0" + now.getSeconds()).slice(-2);
+//     document.getElementById(
+//       "currentDateTime"
+//     ).innerHTML = `<b> ${now.toLocaleDateString("en-US", {
+//       weekday: "long",
+//       year: "numeric",
+//       month: "long",
+//       day: "numeric",
+//     })}</b>`;
+//     document.getElementById(
+//       "currentTime"
+//     ).innerHTML = `<b>${hour}:${minute}:${second}</b>`;
+//   }, 1000);
+
+
 });
 
 
